@@ -1,0 +1,15 @@
+LOGIN
+1. No Firebase > Authentication > Método de login, ative E-mail/Senha.
+2. Em Authentication > Usuários, crie:
+   admin@festajunina.com com a senha que você quiser
+   vendedor@festajunina.com com a senha que você quiser
+3. Na tela do sistema, você pode entrar usando:
+   admin ou admin@festajunina.com
+   vendedor ou vendedor@festajunina.com
+   A senha é a mesma que você criou no Firebase.
+
+FIRESTORE
+Cole as regras do arquivo REGRAS_FIRESTORE.txt em Firestore Database > Regras.
+
+GITHUB
+Envie todos estes arquivos para o repositório, mantendo a pasta img.
