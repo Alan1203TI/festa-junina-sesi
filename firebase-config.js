@@ -4,8 +4,8 @@ import { initializeApp } from "firebase/app";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDlml_HSpqPOB8hk4i5BOuFRTzPONmSoKU",
+export const firebaseConfig = {
+  apiKey: "AIzaSyD1ml_HSpqPOB8hk4i5BOuFRTzP0NmSoKU",
   authDomain: "festa-junina-sesi.firebaseapp.com",
   projectId: "festa-junina-sesi",
   storageBucket: "festa-junina-sesi.firebasestorage.app",
