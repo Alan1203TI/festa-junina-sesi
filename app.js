@@ -312,9 +312,7 @@ function renderHistory() {
 function exportCSV() {
   const nomesProdutos = [
     ...new Set(
-      sales.flatMap(s =>
-        (s.itens || []).map(i => i.name)
-      )
+      sales.flatMap(s => (s.itens || []).map(i => i.name))
     )
   ];
 
@@ -329,35 +327,31 @@ function exportCSV() {
   ];
 
   const linhas = sales.map(s => {
-    const linha = [];
-
-    linha.push(saleDate(s).toLocaleString("pt-BR"));
-    linha.push(s.sellerName || s.seller);
-    linha.push(s.paymentMethod || "Dinheiro");
+    const linha = [
+      saleDate(s).toLocaleString("pt-BR"),
+      s.sellerName || s.seller,
+      s.paymentMethod || "Dinheiro"
+    ];
 
     nomesProdutos.forEach(nome => {
       const item = (s.itens || []).find(i => i.name === nome);
       linha.push(item ? item.qty : 0);
     });
 
-    linha.push(Number(s.paid || 0).toFixed(2));
-    linha.push(Number(s.change || 0).toFixed(2));
-    linha.push(Number(s.total || 0).toFixed(2));
+    linha.push(Number(s.paid || 0).toFixed(2).replace(".", ","));
+    linha.push(Number(s.change || 0).toFixed(2).replace(".", ","));
+    linha.push(Number(s.total || 0).toFixed(2).replace(".", ","));
 
-    const linhaTratada = linha.map(valor => {
-      const texto = String(valor).replace(/"/g, '""');
-      return `"${texto}"`;
-    });
-
-    return linhaTratada.join(";");
+    return linha
+      .map(valor => `"${String(valor).replace(/"/g, '""')}"`)
+      .join(";");
   });
 
-  const csv = cabecalho.join(";") + "\n" + linhas.join("\n");
+  const csv = "sep=;\n" + cabecalho.join(";") + "\n" + linhas.join("\n");
 
-  const blob = new Blob(
-    ["\uFEFF" + csv],
-    { type: "text/csv;charset=utf-8;" }
-  );
+  const blob = new Blob(["\uFEFF" + csv], {
+    type: "text/csv;charset=utf-8;"
+  });
 
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
