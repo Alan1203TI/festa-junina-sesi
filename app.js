@@ -49,6 +49,7 @@ let products = [];
 let sales = [];
 let cart = {};
 let imageBase64 = "";
+let paymentMethod = "Dinheiro";
 
 const $ = (id) => document.getElementById(id);
 
@@ -119,6 +120,19 @@ async function loadSales() {
   renderHistory();
 }
 
+function renderProductImage(image, name = "Produto") {
+  if (!image) return "🛒";
+
+  if (
+    String(image).startsWith("http") ||
+    String(image).startsWith("data:image")
+  ) {
+    return `<img src="${image}" alt="${name}">`;
+  }
+
+  return image;
+}
+
 function renderProducts() {
   $("productsGrid").innerHTML = products.map(p => {
     const image = renderProductImage(p.image, p.name);
@@ -149,19 +163,6 @@ function renderProducts() {
   document.querySelectorAll("[data-edit]").forEach(btn => {
     btn.onclick = () => openProductModal(btn.dataset.edit);
   });
-}
-
-function renderProductImage(image, name = "Produto") {
-  if (!image) return "🛒";
-
-  if (
-    String(image).startsWith("http") ||
-    String(image).startsWith("data:image")
-  ) {
-    return `<img src="${image}" alt="${name}">`;
-  }
-
-  return image;
 }
 
 function addToCart(id) {
@@ -240,7 +241,7 @@ async function finishSale() {
   const total = cartTotal();
   const paid = Number($("paidValue").value || 0);
 
-  if (paid < total && !confirm("Valor recebido menor que o total. Confirmar mesmo assim?")) {
+  if (paid < total && paymentMethod === "Dinheiro" && !confirm("Valor recebido menor que o total. Confirmar mesmo assim?")) {
     return;
   }
 
@@ -260,7 +261,8 @@ async function finishSale() {
     itens,
     total,
     paid,
-    change: paid - total,
+    change: paymentMethod === "Dinheiro" ? paid - total : 0,
+    paymentMethod,
     seller: currentUser.email,
     sellerName: isAdmin() ? "Administrador" : "Vendedor",
     createdAt: serverTimestamp(),
@@ -301,6 +303,7 @@ function renderHistory() {
     <tr>
       <td>${saleDate(s).toLocaleString("pt-BR")}</td>
       <td>${s.sellerName || s.seller}</td>
+      <td>${s.paymentMethod || "Dinheiro"}</td>
       <td>${(s.itens || []).map(i => `${i.qty}x ${i.name}`).join("; ")}</td>
       <td>${money(s.paid)}</td>
       <td>${money(s.change)}</td>
@@ -313,6 +316,7 @@ function exportCSV() {
   const rows = sales.map(s => [
     saleDate(s).toLocaleString("pt-BR"),
     s.sellerName || s.seller,
+    s.paymentMethod || "Dinheiro",
     (s.itens || []).map(i => `${i.qty}x ${i.name}`).join(" | "),
     Number(s.paid || 0).toFixed(2),
     Number(s.change || 0).toFixed(2),
@@ -320,7 +324,7 @@ function exportCSV() {
   ].join(";"));
 
   const blob = new Blob(
-    ["Data;Vendedor;Itens;Pago;Troco;Total\n" + rows.join("\n")],
+    ["Data;Vendedor;Pagamento;Itens;Pago;Troco;Total\n" + rows.join("\n")],
     { type: "text/csv;charset=utf-8" }
   );
 
@@ -451,6 +455,21 @@ async function deleteProduct() {
   }
 }
 
+function selectPayment(button) {
+  document.querySelectorAll(".payment-btn").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  button.classList.add("active");
+  paymentMethod = button.dataset.payment;
+
+  if (paymentMethod !== "Dinheiro") {
+    $("paidValue").value = cartTotal();
+  }
+
+  renderCart();
+}
+
 $("btnLogin").onclick = login;
 
 $("loginPass").addEventListener("keydown", e => {
@@ -466,6 +485,10 @@ document.querySelectorAll(".quick-money button").forEach(b => {
     $("paidValue").value = Number(b.dataset.money);
     renderCart();
   };
+});
+
+document.querySelectorAll(".payment-btn").forEach(btn => {
+  btn.onclick = () => selectPayment(btn);
 });
 
 $("btnFinish").onclick = finishSale;
