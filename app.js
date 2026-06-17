@@ -139,12 +139,9 @@ function renderProducts() {
 
     return `
       <div class="product-card">
-
         ${isAdmin() ? `<button class="edit-prod" data-edit="${p.id}">✎</button>` : ""}
 
-        <div class="product-img">
-          ${image}
-        </div>
+        <div class="product-img">${image}</div>
 
         <h3>${p.name}</h3>
         <small>${p.category || "Produto"}</small>
@@ -313,19 +310,53 @@ function renderHistory() {
 }
 
 function exportCSV() {
-  const rows = sales.map(s => [
-    saleDate(s).toLocaleString("pt-BR"),
-    s.sellerName || s.seller,
-    s.paymentMethod || "Dinheiro",
-    (s.itens || []).map(i => `${i.qty}x ${i.name}`).join(" | "),
-    Number(s.paid || 0).toFixed(2),
-    Number(s.change || 0).toFixed(2),
-    Number(s.total || 0).toFixed(2)
-  ].join(";"));
+  const nomesProdutos = [
+    ...new Set(
+      sales.flatMap(s =>
+        (s.itens || []).map(i => i.name)
+      )
+    )
+  ];
+
+  const cabecalho = [
+    "Data",
+    "Vendedor",
+    "Pagamento",
+    ...nomesProdutos,
+    "Pago",
+    "Troco",
+    "Total"
+  ];
+
+  const linhas = sales.map(s => {
+    const linha = [];
+
+    linha.push(saleDate(s).toLocaleString("pt-BR"));
+    linha.push(s.sellerName || s.seller);
+    linha.push(s.paymentMethod || "Dinheiro");
+
+    nomesProdutos.forEach(nome => {
+      const item = (s.itens || []).find(i => i.name === nome);
+      linha.push(item ? item.qty : 0);
+    });
+
+    linha.push(Number(s.paid || 0).toFixed(2));
+    linha.push(Number(s.change || 0).toFixed(2));
+    linha.push(Number(s.total || 0).toFixed(2));
+
+    const linhaTratada = linha.map(valor => {
+      const texto = String(valor).replace(/"/g, '""');
+      return `"${texto}"`;
+    });
+
+    return linhaTratada.join(";");
+  });
+
+  const csv = cabecalho.join(";") + "\n" + linhas.join("\n");
 
   const blob = new Blob(
-    ["Data;Vendedor;Pagamento;Itens;Pago;Troco;Total\n" + rows.join("\n")],
-    { type: "text/csv;charset=utf-8" }
+    ["\uFEFF" + csv],
+    { type: "text/csv;charset=utf-8;" }
   );
 
   const a = document.createElement("a");
@@ -524,8 +555,4 @@ onAuthStateChanged(auth, user => {
     $("loginScreen").classList.remove("hidden");
     $("loginMsg").textContent = "";
   }
-});
-
-window.addEventListener("error", e => {
-  console.error("Erro geral:", e.message);
 });
