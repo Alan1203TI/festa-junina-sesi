@@ -282,11 +282,66 @@ button {
   text-align: right;
 }
 
+.payment-box {
+  margin-top: 20px;
+}
+
+.payment-box h3 {
+  margin: 0 0 12px;
+  font-size: 20px;
+  color: #ffd23f;
+  text-align: center;
+}
+
+.payment-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 11px;
+}
+
+.payment-btn {
+  height: 92px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  font-size: 32px;
+  border-radius: 22px;
+  font-weight: bold;
+  transition: .18s ease;
+  border: 3px solid transparent;
+}
+
+.payment-btn span {
+  font-size: 18px;
+}
+
+.payment-btn[data-payment="Dinheiro"] {
+  background: linear-gradient(180deg, #24a33a, #0d5c1b);
+}
+
+.payment-btn[data-payment="Débito"] {
+  background: linear-gradient(180deg, #006dff, #003c9b);
+}
+
+.payment-btn[data-payment="Crédito"] {
+  background: linear-gradient(180deg, #e21d1d, #870000);
+}
+
+.payment-btn.active {
+  transform: scale(1.06);
+  border: 3px solid #ffd23f;
+  box-shadow:
+    0 0 0 3px rgba(255, 210, 63, .18),
+    0 0 24px rgba(255, 255, 255, .45);
+}
+
 .quick-money {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 8px;
-  margin: 12px 0;
+  margin: 14px 0;
 }
 
 .finish {
@@ -411,5 +466,14 @@ dialog {
   .hero {
     font-size: 22px;
     padding: 0 10px;
+  }
+
+  .payment-btn {
+    height: 82px;
+    font-size: 28px;
+  }
+
+  .payment-btn span {
+    font-size: 15px;
   }
 }
