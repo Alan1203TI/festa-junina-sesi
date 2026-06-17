@@ -57,9 +57,7 @@
       <aside class="panel cart-panel">
         <h2>Carrinho</h2>
 
-        <div id="cartList" class="cart-list empty">
-          Nenhum item adicionado.
-        </div>
+        <div id="cartList" class="cart-list empty">Nenhum item adicionado.</div>
 
         <div class="totals">
           <div>
@@ -75,6 +73,27 @@
           <div>
             <span>Troco</span>
             <strong id="changeValue">R$ 0,00</strong>
+          </div>
+        </div>
+
+        <div class="payment-box">
+          <h3>Forma de pagamento</h3>
+
+          <div class="payment-buttons">
+            <button class="payment-btn active" data-payment="Dinheiro">
+              💵
+              <span>Dinheiro</span>
+            </button>
+
+            <button class="payment-btn" data-payment="Débito">
+              💳
+              <span>Débito</span>
+            </button>
+
+            <button class="payment-btn" data-payment="Crédito">
+              🏦
+              <span>Crédito</span>
+            </button>
           </div>
         </div>
 
@@ -121,6 +140,7 @@
             <tr>
               <th>Data/Hora</th>
               <th>Vendedor</th>
+              <th>Pagamento</th>
               <th>Itens</th>
               <th>Pago</th>
               <th>Troco</th>
