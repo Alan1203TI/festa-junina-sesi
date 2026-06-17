@@ -20,7 +20,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(90deg, #002b72, #700000);
+  background:
+    linear-gradient(90deg, rgba(0, 43, 114, .88), rgba(112, 0, 0, .88)),
+    url("image.png") center/cover;
 }
 
 .login-card {
@@ -36,6 +38,7 @@ body {
 .login-card h1 {
   color: #fff;
   font-size: 34px;
+  margin-bottom: 8px;
 }
 
 .login-card p {
@@ -69,29 +72,27 @@ button {
 }
 
 .topbar {
-  min-height: 210px;
+  min-height: 280px;
   border-radius: 0 0 26px 26px;
   padding: 25px;
-  background:
-    linear-gradient(90deg, rgba(0, 50, 130, .88), rgba(0, 0, 0, .75), rgba(160, 0, 0, .88)),
-    url("image.png") center/cover;
+  background-image:
+    linear-gradient(90deg, rgba(0, 50, 130, .20), rgba(0, 0, 0, .20), rgba(160, 0, 0, .20)),
+    url("image.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border-bottom: 3px solid #ff2b2b;
   box-shadow: 0 0 35px rgba(0, 0, 0, .8);
+  position: relative;
 }
 
 .brand {
+  height: 220px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 35px;
+  align-items: flex-end;
   text-align: center;
-}
-
-.brand img,
-.bois-login img {
-  width: 90px;
-  height: 90px;
-  object-fit: contain;
+  padding-bottom: 8px;
 }
 
 .brand h1 {
@@ -99,6 +100,7 @@ button {
   font-size: 48px;
   text-transform: uppercase;
   letter-spacing: 2px;
+  text-shadow: 0 0 18px #000;
 }
 
 .brand span {
@@ -107,13 +109,14 @@ button {
   color: #ffd23f;
   font-size: 22px;
   font-weight: bold;
+  text-shadow: 0 0 12px #000;
 }
 
 .userbox {
   position: absolute;
   right: 25px;
   top: 25px;
-  background: rgba(0, 0, 0, .55);
+  background: rgba(0, 0, 0, .65);
   padding: 12px;
   border-radius: 12px;
   border: 1px solid #2a8cff;
@@ -122,21 +125,21 @@ button {
 .hero {
   display: flex;
   justify-content: space-between;
-  margin: 15px 0;
-  font-size: 26px;
+  align-items: center;
+  margin: 18px 0 20px;
+  padding: 0 25px;
+  font-size: 34px;
   font-weight: bold;
 }
 
 .hero-blue {
   color: #2a8cff;
+  text-shadow: 0 0 12px #2a8cff;
 }
 
 .hero-red {
   color: #ff2b2b;
-}
-
-.hero-center {
-  color: #ffd23f;
+  text-shadow: 0 0 12px #ff2b2b;
 }
 
 .layout {
@@ -172,7 +175,7 @@ button {
 
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
   gap: 14px;
 }
 
@@ -180,7 +183,7 @@ button {
   position: relative;
   text-align: center;
   padding: 14px;
-  min-height: 210px;
+  min-height: 235px;
   border-radius: 14px;
   background: linear-gradient(180deg, rgba(0, 65, 140, .7), rgba(0, 15, 45, .95));
   border: 1px solid #168cff;
@@ -193,14 +196,33 @@ button {
   text-transform: uppercase;
 }
 
+.product-card small {
+  color: #dce8ff;
+}
+
 .product-img {
+  height: 95px;
   font-size: 64px;
-  height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .product-img img {
-  max-width: 90px;
-  max-height: 78px;
+  max-width: 110px;
+  max-height: 90px;
+  object-fit: contain;
+  border-radius: 14px;
+}
+
+.edit-prod {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 7px 10px;
+  border-radius: 50%;
+  background: #ffd23f;
+  color: #000;
 }
 
 .price {
@@ -305,6 +327,10 @@ button {
   color: #ffd23f;
 }
 
+.table-wrap {
+  overflow-x: auto;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -331,12 +357,34 @@ dialog {
   background: #07152d;
   color: white;
   border: 2px solid #ffd23f;
+  min-width: 340px;
 }
 
 .modal-card input {
   width: 100%;
   padding: 12px;
   margin: 8px 0 14px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+#previewImage {
+  margin: 10px 0 15px;
+  text-align: center;
+}
+
+#previewImage img {
+  max-width: 140px;
+  max-height: 120px;
+  object-fit: contain;
+  border-radius: 18px;
+  border: 3px solid #ffd23f;
+  background: rgba(255,255,255,.08);
+  padding: 5px;
 }
 
 @media (max-width: 900px) {
@@ -348,7 +396,20 @@ dialog {
     font-size: 32px;
   }
 
+  .brand span {
+    font-size: 18px;
+  }
+
   .topbar {
-    min-height: 160px;
+    min-height: 190px;
+  }
+
+  .brand {
+    height: 145px;
+  }
+
+  .hero {
+    font-size: 22px;
+    padding: 0 10px;
   }
 }
